@@ -5,9 +5,7 @@ interface SquareProps {
     onClick(): void
 }
 const Square: React.FC<SquareProps> = (props): JSX.Element => (
-    <button
-        className="square"
-        onClick={props.onClick}>
+    <button className="square" onClick={props.onClick}>
         {props.value}
     </button>
 )
