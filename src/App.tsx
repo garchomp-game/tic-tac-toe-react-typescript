@@ -11,37 +11,43 @@ class App extends React.Component<AppProps, AppState> {
 				squares: Array(9).fill(null)
 			}],
 			xIsNext: true,
-			stepNumber: 0
+			stepNumber: 0,
+			launch: null
 		}
 	}
     handleClick(i: number): void {
 		const history: Array<HistoryInterface> = this.state.history.slice(
 			0,
 			this.state.stepNumber + 1)
-		const current: HistoryInterface = history[history.length - 1];
-		const squares: Array<string | null> = current.squares.slice();
+		const current: HistoryInterface = history[history.length - 1]
+		const squares: Array<string | null> = current.squares.slice()
 		if (calculateWinner(squares) || squares[i]) {
-		  return;
+		  return
 		}
-		squares[i] = this.state.xIsNext ? 'X' : 'O';
+		squares[i] = this.state.xIsNext ? 'X' : 'O'
 		this.setState({
 		  history: history.concat([{
 			squares
 		  }]),
 		  stepNumber: history.length,
 		  xIsNext: !this.state.xIsNext,
-		});
+		  launch: i
+		})
 	}
 	jumpTo(step: number) {
 		this.setState({
 			stepNumber: step,
-			xIsNext: (step % 2) === 0
+			xIsNext: (step % 2) === 0,
 		})
 	}
+	calcLaunch(launch: number | null): Array<number> {
+		// TODO: あとで実装する
+		return [1, 1]
+	}
 	render(): JSX.Element {
-		const history: Array<HistoryInterface> = this.state.history;
-		const current: HistoryInterface = history[this.state.stepNumber];
-		const winner: string | null = calculateWinner(current.squares);
+		const history: Array<HistoryInterface> = this.state.history
+		const current: HistoryInterface = history[this.state.stepNumber]
+		const winner: string | null = calculateWinner(current.squares)
 
 		const moves: Array<JSX.Element> = history.map((step: HistoryInterface, move: number) => {
 			const desc = move ?
@@ -56,12 +62,14 @@ class App extends React.Component<AppProps, AppState> {
 			)
 		})
 	
-		let status;
+		let status: string
 		if (winner) {
-		  status = 'Winner: ' + winner;
+		  status = 'Winner: ' + winner
 		} else {
-		  status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+		  status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
 		}
+		let launch: Array<number>
+		launch = this.calcLaunch(this.state.launch)
 		return (
 			<div className="game">
 				<div className="game-board">
@@ -72,6 +80,7 @@ class App extends React.Component<AppProps, AppState> {
 				</div>
 				<div className="game-info">
                		<div>{status}</div>
+					<div>{launch}</div>
 					<ol>{moves}</ol>
 				</div>
 			</div>
