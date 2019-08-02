@@ -5,6 +5,10 @@ interface HistoryInterface {
 	 * ９マスの中にo x nullのいずれか入る
 	 */
 	squares: Array<string | null>
+	/**
+	 * 着手したマスの保存用(から8までの数字が入る)
+	 */
+	launch: string | null
 }
 interface AppState {
 	/**
@@ -19,10 +23,6 @@ interface AppState {
 	 * 手数表示用
 	 */
 	stepNumber: number
-	/**
-	 * 着手したマスの保存用(から8までの数字が入る)
-	 */
-	launch: number | null
 }
 interface AppProps {
 }

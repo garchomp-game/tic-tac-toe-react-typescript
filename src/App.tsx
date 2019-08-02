@@ -8,30 +8,31 @@ class App extends React.Component<AppProps, AppState> {
 		super(props)
 		this.state = {
 			history: [{
-				squares: Array(9).fill(null)
+				squares: Array(9).fill(null),
+				launch: null
 			}],
 			xIsNext: true,
-			stepNumber: 0,
-			launch: null
+			stepNumber: 0
 		}
 	}
-    handleClick(i: number): void {
+	handleClick(i: number): void {
 		const history: Array<HistoryInterface> = this.state.history.slice(
 			0,
 			this.state.stepNumber + 1)
 		const current: HistoryInterface = history[history.length - 1]
 		const squares: Array<string | null> = current.squares.slice()
 		if (calculateWinner(squares) || squares[i]) {
-		  return
+			return
 		}
+		const launch: string | null = this.calcLaunch(i)
 		squares[i] = this.state.xIsNext ? 'X' : 'O'
 		this.setState({
-		  history: history.concat([{
-			squares
-		  }]),
-		  stepNumber: history.length,
-		  xIsNext: !this.state.xIsNext,
-		  launch: i
+			history: history.concat([{
+				squares,
+				launch
+			}]),
+			stepNumber: history.length,
+			xIsNext: !this.state.xIsNext
 		})
 	}
 	jumpTo(step: number) {
@@ -40,9 +41,12 @@ class App extends React.Component<AppProps, AppState> {
 			xIsNext: (step % 2) === 0,
 		})
 	}
-	calcLaunch(launch: number | null): Array<number> {
-		// TODO: あとで実装する
-		return [1, 1]
+	calcLaunch(launch: number | null): string | null {
+		if (launch != null) {
+			return `col: ${Math.floor(launch / 3)} row: ${Math.floor(launch % 3)}`
+		} else {
+			return null
+		}
 	}
 	render(): JSX.Element {
 		const history: Array<HistoryInterface> = this.state.history
@@ -51,8 +55,8 @@ class App extends React.Component<AppProps, AppState> {
 
 		const moves: Array<JSX.Element> = history.map((step: HistoryInterface, move: number) => {
 			const desc = move ?
-			'Go to move #' + move :
-			'Go to game start'
+				'Go to move #' + move :
+				'Go to game start'
 			return (
 				<li key={move}>
 					<button onClick={() => this.jumpTo(move)}>
@@ -61,25 +65,25 @@ class App extends React.Component<AppProps, AppState> {
 				</li>
 			)
 		})
-	
+
 		let status: string
 		if (winner) {
-		  status = 'Winner: ' + winner
+			status = 'Winner: ' + winner
 		} else {
-		  status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
+			status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
 		}
-		let launch: Array<number>
-		launch = this.calcLaunch(this.state.launch)
+		let launch: string | null
+		launch = current.launch
 		return (
 			<div className="game">
 				<div className="game-board">
 					<Board
-					squares={current.squares}
-					onClick={(i) => this.handleClick(i)}
+						squares={current.squares}
+						onClick={(i) => this.handleClick(i)}
 					/>
 				</div>
 				<div className="game-info">
-               		<div>{status}</div>
+					<div>{status}</div>
 					<div>{launch}</div>
 					<ol>{moves}</ol>
 				</div>
