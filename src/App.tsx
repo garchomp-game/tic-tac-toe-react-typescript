@@ -59,7 +59,10 @@ class App extends React.Component<AppProps, AppState> {
 				'Go to game start'
 			return (
 				<li key={move}>
-					<button onClick={() => this.jumpTo(move)}>
+					<button
+						className={this.state.stepNumber === move ? 'bold' : 'normal'}
+						onClick={() => this.jumpTo(move)}
+					>
 						{desc}
 					</button>
 				</li>
