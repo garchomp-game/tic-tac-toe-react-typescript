@@ -23,6 +23,10 @@ interface AppState {
 	 * 手数表示用
 	 */
 	stepNumber: number
+	/**
+	 * 履歴リスト上下入れ替え用の履歴のフラグ
+	 */
+	reverseFlg: boolean
 }
 interface AppProps {
 }

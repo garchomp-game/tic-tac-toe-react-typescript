@@ -12,8 +12,10 @@ class App extends React.Component<AppProps, AppState> {
 				launch: null
 			}],
 			xIsNext: true,
-			stepNumber: 0
+			stepNumber: 0,
+			reverseFlg: false
 		}
+		this.changeHistorySort = this.changeHistorySort.bind(this)
 	}
 	handleClick(i: number): void {
 		const history: Array<HistoryInterface> = this.state.history.slice(
@@ -48,12 +50,8 @@ class App extends React.Component<AppProps, AppState> {
 			return null
 		}
 	}
-	render(): JSX.Element {
-		const history: Array<HistoryInterface> = this.state.history
-		const current: HistoryInterface = history[this.state.stepNumber]
-		const winner: string | null = calculateWinner(current.squares)
-
-		const moves: Array<JSX.Element> = history.map((step: HistoryInterface, move: number) => {
+	movesList(history: Array<HistoryInterface>, flg: boolean): Array<JSX.Element> {
+		let moves = history.map((step: HistoryInterface, move: number) => {
 			const desc = move ?
 				'Go to move #' + move :
 				'Go to game start'
@@ -68,6 +66,22 @@ class App extends React.Component<AppProps, AppState> {
 				</li>
 			)
 		})
+		if (flg) {
+			return moves
+		} else {
+			return moves.reverse()
+		}
+	}
+	changeHistorySort() {
+		this.setState({
+			reverseFlg: !this.state.reverseFlg
+		})
+	}
+	render(): JSX.Element {
+		const history: Array<HistoryInterface> = this.state.history
+		const current: HistoryInterface = history[this.state.stepNumber]
+		const winner: string | null = calculateWinner(current.squares)
+		const moves: Array<JSX.Element> = this.movesList(history, this.state.reverseFlg)
 
 		let status: string
 		if (winner) {
@@ -87,8 +101,11 @@ class App extends React.Component<AppProps, AppState> {
 				</div>
 				<div className="game-info">
 					<div>{status}</div>
+					<button onClick={this.changeHistorySort}>ならべかえる</button> 
 					<div>{launch}</div>
-					<ol>{moves}</ol>
+					<ol reversed={this.state.reverseFlg}>
+						{moves}
+					</ol>
 				</div>
 			</div>
 		)
