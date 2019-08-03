@@ -35,6 +35,11 @@ interface AppProps {
 interface BoardProps {
 	onClick(i: number):  void
 	squares: Array<string | null>
+	/**
+	 * 勝利した時の３ますの数字を保持する配列。フラグとしても扱う
+	 * （本来は別に分けるべきなのでまた後ほど分け方等を考える)
+	 */
+	winner: Array<number> | null
 }
 interface BoardState {
     xIsNext: boolean
@@ -44,6 +49,13 @@ interface SquareProps {
 	/**
 	 * squaresの中身のo x nullのいずれかが入る
 	 */
-    value: string | null
-    onClick(): void
+	value: string | null
+	/**
+	 * props伝達用
+	 */
+	onClick(): void
+	/**
+	 * 勝利した時のハイライトを表示するために使うフラグtukauhuragu
+	 */
+	hilightFlg: boolean | null
 }

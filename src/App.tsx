@@ -80,12 +80,13 @@ class App extends React.Component<AppProps, AppState> {
 	render(): JSX.Element {
 		const history: Array<HistoryInterface> = this.state.history
 		const current: HistoryInterface = history[this.state.stepNumber]
-		const winner: string | null = calculateWinner(current.squares)
+		const winner: Array<number> | null = calculateWinner(current.squares)
 		const moves: Array<JSX.Element> = this.movesList(history, this.state.reverseFlg)
 
 		let status: string
 		if (winner) {
-			status = 'Winner: ' + winner
+			// あとで読みやすい形に変える
+			status = 'Winner: ' + winner[0]
 		} else {
 			status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
 		}
@@ -95,6 +96,7 @@ class App extends React.Component<AppProps, AppState> {
 			<div className="game">
 				<div className="game-board">
 					<Board
+						winner={winner}
 						squares={current.squares}
 						onClick={(i) => this.handleClick(i)}
 					/>
