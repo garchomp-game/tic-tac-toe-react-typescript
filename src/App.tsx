@@ -67,9 +67,9 @@ class App extends React.Component<AppProps, AppState> {
 			)
 		})
 		if (flg) {
-			return moves
-		} else {
 			return moves.reverse()
+		} else {
+			return moves
 		}
 	}
 	changeHistorySort() {
@@ -85,8 +85,12 @@ class App extends React.Component<AppProps, AppState> {
 
 		let status: string
 		if (winner) {
-			// あとで読みやすい形に変える
-			status = 'Winner: ' + winner[0]
+			if (winner.length === 3) {
+				// あとで読みやすい形に変える
+				status = 'Winner: ' + (!this.state.xIsNext ? 'X' : 'O')
+			} else {
+				status = 'drow!'
+			}
 		} else {
 			status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O')
 		}

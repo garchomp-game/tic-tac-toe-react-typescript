@@ -14,6 +14,8 @@ function calculateWinner(squares: Array<string | null>): Array<number> | null {
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
             // マッチした３マスの数字を返す
             return lines[i]
+        } else if (squares.indexOf(null) === -1) {
+            return []
         }
     }
     return null
